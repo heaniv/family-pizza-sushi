@@ -11,7 +11,7 @@
   --line: #3b3d35;
   --accent: #e8793d;
   --accent-hover: #f28c50;
-  --sun: #f4cf70;
+  --accent-red: #ef665c;
   --herb: #91a77d;
   --salmon: #d98978;
   --sea: #83b8b1;
@@ -85,7 +85,7 @@ input:focus-visible,
 select:focus-visible,
 summary:focus-visible,
 textarea:focus-visible {
-  outline: 3px solid var(--sun);
+  outline: 3px solid var(--accent-red);
   outline-offset: 4px;
 }
 
@@ -167,7 +167,7 @@ h4 {
   left: 12px;
   padding: 12px 18px;
   border-radius: 8px;
-  background: var(--sun);
+  background: var(--accent-red);
   color: #151611;
 }
 
@@ -248,7 +248,7 @@ h4 {
 .desktop-nav a:hover,
 .footer a:hover,
 .text-link:hover {
-  color: var(--sun);
+  color: var(--accent-red);
 }
 
 .header-actions {
@@ -279,7 +279,7 @@ h4 {
   gap: 9px;
   padding: 0 16px;
   border-radius: 999px;
-  background: var(--sun);
+  background: var(--accent-red);
   color: #171813;
   font-weight: 850;
   transition: transform 180ms ease, background 180ms ease;
@@ -287,7 +287,7 @@ h4 {
 
 .bag-button:hover {
   transform: translateY(-2px);
-  background: #ffdf83;
+  background: #ff9188;
 }
 
 .bag-button svg {
@@ -355,7 +355,7 @@ h4 {
 
 .hero-copy .eyebrow {
   margin-bottom: 23px;
-  color: var(--sun);
+  color: var(--accent-red);
 }
 
 .tiny-star {
@@ -433,8 +433,8 @@ h4 {
 }
 
 .button-outline:hover {
-  border-color: var(--sun);
-  background: #f4cf7012;
+  border-color: var(--accent-red);
+  background: #f0675d1f;
 }
 
 .button-light {
@@ -443,7 +443,7 @@ h4 {
 }
 
 .button-light:hover {
-  background: var(--sun);
+  background: var(--accent-red);
 }
 
 .text-link {
@@ -538,7 +538,7 @@ h4 {
   gap: 4px;
   border: 5px solid var(--page);
   border-radius: 50%;
-  background: var(--sun);
+  background: var(--accent-red);
   color: #171713;
   transform: rotate(-10deg);
 }
@@ -574,7 +574,7 @@ h4 {
 }
 
 .photo-note:hover {
-  background: var(--sun);
+  background: var(--accent-red);
   transform: rotate(-1deg) translateY(-3px);
 }
 
@@ -591,7 +591,7 @@ h4 {
   position: absolute;
   bottom: 0;
   left: 0;
-  color: var(--sun);
+  color: var(--accent-red);
 }
 
 .art-spark .ui-icon {
@@ -605,7 +605,7 @@ h4 {
   overflow: hidden;
   border-block: 1px solid #ffffff18;
   background: #1c1e19;
-  color: var(--sun);
+  color: var(--accent-red);
 }
 
 .flavour-strip > div {
@@ -644,7 +644,7 @@ h4 {
 .about-copy .eyebrow,
 .faq-section .eyebrow {
   margin-bottom: 15px;
-  color: var(--sun);
+  color: var(--accent-red);
 }
 
 .section-heading > p {
@@ -698,7 +698,7 @@ h4 {
   height: 21px;
   align-items: center;
   justify-content: center;
-  color: var(--sun);
+  color: var(--accent-red);
 }
 
 .category-icon .ui-icon {
@@ -706,7 +706,7 @@ h4 {
   height: 20px;
 }
 
-.category-tab[data-category="pizza"] .category-icon { color: var(--sun); }
+.category-tab[data-category="pizza"] .category-icon { color: var(--accent-red); }
 .category-tab[data-category="sushi"] .category-icon { color: var(--salmon); }
 .category-tab[data-category="hot"] .category-icon { color: var(--accent); }
 .category-tab[data-category="salads"] .category-icon { color: var(--herb); }
@@ -903,7 +903,7 @@ input[type="search"]::-webkit-search-cancel-button {
 
 .dish-add:hover {
   transform: rotate(90deg);
-  background: var(--sun);
+  background: var(--accent-red);
 }
 
 .dish-add .ui-icon {
@@ -942,7 +942,7 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 
 .empty-icon {
-  color: var(--sun);
+  color: var(--accent-red);
   font-size: 38px;
 }
 
@@ -1062,7 +1062,7 @@ input[type="search"]::-webkit-search-cancel-button {
 
 .about-copy .text-link {
   margin-top: 10px;
-  color: var(--sun);
+  color: var(--accent-red);
 }
 
 /* Visit, takeaway, delivery */
@@ -1101,7 +1101,7 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 
 .service-number {
-  color: var(--sun);
+  color: var(--accent-red);
   font-size: 10px;
   font-weight: 900;
   letter-spacing: 0.16em;
@@ -1169,22 +1169,22 @@ input[type="search"]::-webkit-search-cancel-button {
   height: 17px;
 }
 
-.yellow-service {
-  border-color: var(--sun);
-  background: var(--sun);
+.accent-service {
+  border-color: var(--accent-red);
+  background: var(--accent-red);
   color: #171713;
 }
 
-.yellow-service::after {
+.accent-service::after {
   border-color: #17171320;
 }
 
-.yellow-service p,
-.yellow-service .service-number {
+.accent-service p,
+.accent-service .service-number {
   color: #4b4636;
 }
 
-.yellow-service > a {
+.accent-service > a {
   border-color: #17171338;
 }
 
@@ -1203,7 +1203,7 @@ input[type="search"]::-webkit-search-cancel-button {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  color: var(--sun);
+  color: var(--accent-red);
   font-weight: 850;
 }
 
@@ -1231,7 +1231,7 @@ input[type="search"]::-webkit-search-cancel-button {
 
 .reviews-copy .eyebrow {
   margin-bottom: 15px;
-  color: var(--sun);
+  color: var(--accent-red);
 }
 
 .reviews-copy h2 {
@@ -1353,7 +1353,7 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 
 .faq-list details p a {
-  color: var(--sun);
+  color: var(--accent-red);
   text-decoration: underline;
   text-underline-offset: 3px;
 }
@@ -1376,7 +1376,7 @@ footer {
 
 .footer-top .eyebrow {
   margin-bottom: 14px;
-  color: var(--sun);
+  color: var(--accent-red);
 }
 
 .footer-top h2 {
@@ -1398,7 +1398,7 @@ footer {
 
 .footer-call:hover {
   transform: rotate(45deg);
-  background: var(--sun);
+  background: var(--accent-red);
 }
 
 .footer-call .ui-icon {
@@ -1516,7 +1516,7 @@ dialog::backdrop {
 
 .cart-heading .eyebrow {
   margin-bottom: 8px;
-  color: var(--sun);
+  color: var(--accent-red);
   font-size: 9px;
 }
 
@@ -1643,7 +1643,7 @@ dialog::backdrop {
 }
 
 .cart-empty .empty-icon {
-  color: var(--sun);
+  color: var(--accent-red);
   font-size: 52px;
 }
 
