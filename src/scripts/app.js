@@ -1,5 +1,6 @@
 import { icon } from "./icons.js";
 import { MENU } from "../data/menu.js";
+import { dishImage } from "../data/dish-images.js";
 import {
   itemById,
   findItems,
@@ -90,7 +91,7 @@ function renderMenu() {
         .slice(0, limit)
         .map(
           (i) =>
-            `<article class="dish"><div class="dish-meta"><span>${escape(i.weight || i.group)}</span>${i.tag ? `<span class="dish-tag">${escape(i.tag)}</span>` : ""}</div><h4>${escape(i.name)}</h4>${i.description ? `<p class="dish-description">${escape(i.description)}</p>` : `<p class="dish-description">${escape(i.group)}</p>`}<div class="dish-bottom"><span class="dish-price">${i.price} <small>₴</small></span><button class="dish-add" data-add="${i.id}" aria-label="Додати: ${escape(i.name)}, ${escape(i.group)}">${icon("plus")}</button></div></article>`,
+            `<article class="dish"><div class="dish-photo"><img src="${dishImage(i)}" alt="Ілюстративне фото: ${escape(i.group)}" loading="lazy" decoding="async"><span class="dish-photo-label">${escape(i.group)}</span></div><div class="dish-content"><div class="dish-meta"><span>${escape(i.weight || i.group)}</span>${i.tag ? `<span class="dish-tag">${escape(i.tag)}</span>` : ""}</div><h4>${escape(i.name)}</h4>${i.description ? `<p class="dish-description">${escape(i.description)}</p>` : `<p class="dish-description">${escape(i.group)}</p>`}<div class="dish-bottom"><span class="dish-price">${i.price} <small>₴</small></span><button class="dish-add" data-add="${i.id}" aria-label="Додати: ${escape(i.name)}, ${escape(i.group)}">${icon("plus")}</button></div></div></article>`,
         )
         .join("")
     : `<div class="empty-state"><span class="empty-icon" aria-hidden="true">${icon("search")}</span><h3>Такої страви не знайшли</h3><p>Спробуйте іншу назву або інгредієнт.</p><button class="button button-outline" data-reset-search>Повернутися до меню</button></div>`;

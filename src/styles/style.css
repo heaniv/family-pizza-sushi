@@ -2071,3 +2071,691 @@ dialog::backdrop {
   width: 18px;
   height: 18px;
 }
+
+/* Figma restaurant concept: dark editorial palette with image-led dishes. */
+:root {
+  --paper: #111310;
+  --ink: #f4f0e8;
+  --muted: #b6b4aa;
+  --yellow: #e8793d;
+  --line: #373831;
+  --white: #1b1d19;
+  --green: #263d31;
+}
+html {
+  background: var(--paper);
+}
+body {
+  background: var(--paper);
+  color: var(--ink);
+}
+.header {
+  background: #111310f2;
+  border-color: #ffffff12;
+  backdrop-filter: blur(16px);
+}
+.desktop-nav a:hover,
+.text-link:hover {
+  color: var(--yellow);
+}
+.bag-button {
+  background: var(--yellow);
+  color: #171713;
+}
+.hero {
+  background: #1a1c18;
+}
+.hero-grid {
+  padding-top: 58px;
+  padding-bottom: 58px;
+}
+.hero h1 {
+  color: #fffaf0;
+}
+.hero-description,
+.hero-bottom {
+  color: #d2d0c6;
+}
+.hero-photo {
+  border-radius: 180px 180px 22px 22px;
+  border: 1px solid #ffffff28;
+  box-shadow: 0 25px 75px #0008;
+}
+.hero-photo:after {
+  background: linear-gradient(transparent, #111310de);
+}
+.photo-note {
+  background: #f0eee6;
+  color: #171813;
+  box-shadow: 0 20px 50px #0005;
+}
+.round-sticker {
+  background: var(--yellow);
+  color: #171713;
+}
+.button-dark {
+  background: var(--yellow);
+  color: #171713;
+}
+.button-dark:hover {
+  background: #f28c50;
+  color: #171713;
+}
+.button-outline {
+  color: var(--ink);
+  border-color: var(--line);
+}
+.button-outline:hover {
+  color: #171713;
+}
+.flavour-strip {
+  background: var(--yellow);
+  color: #171713;
+}
+.menu-section {
+  padding-top: 76px;
+}
+.section-heading h2,
+.section-heading .serif,
+.about-copy h2,
+.faq-section h2 {
+  color: var(--ink);
+}
+.category-tab {
+  background: #1a1c18;
+  border-color: var(--line);
+  color: var(--ink);
+}
+.category-tab[aria-pressed="true"] {
+  background: var(--yellow);
+  color: #171713;
+  border-color: var(--yellow);
+}
+.group-wrap select,
+.search-wrap input[type="search"] {
+  background: #1a1c18;
+  color: var(--ink);
+  border-color: var(--line);
+}
+.search-wrap input::placeholder {
+  color: #8c8e84;
+}
+.dish {
+  overflow: hidden;
+  padding: 0;
+  background: #1b1d19;
+  border-color: #ffffff12;
+  border-radius: 14px;
+  min-height: 0;
+  box-shadow: 0 14px 32px #0002;
+}
+.dish:hover {
+  border-color: #e8793d88;
+  transform: translateY(-3px);
+}
+.dish-photo {
+  height: 190px;
+  position: relative;
+  overflow: hidden;
+  background: #24251f;
+}
+.dish-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.45s ease;
+}
+.dish:hover .dish-photo img {
+  transform: scale(1.045);
+}
+.dish-photo:after {
+  content: "";
+  position: absolute;
+  inset: 40% 0 0;
+  background: linear-gradient(transparent, #111310a8);
+  pointer-events: none;
+}
+.dish-photo-label {
+  position: absolute;
+  z-index: 1;
+  left: 13px;
+  bottom: 12px;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  text-shadow: 0 1px 8px #0008;
+}
+.dish-content {
+  padding: 17px 18px 18px;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+.dish-meta {
+  color: #aaa99f;
+}
+.dish-tag {
+  background: #53321f;
+  color: #ffb17c;
+}
+.dish h4 {
+  color: #fffaf0;
+}
+.dish-description {
+  color: #b7b5ab;
+}
+.dish-add {
+  color: #151611;
+  background: var(--yellow);
+  border-color: var(--yellow);
+  border-radius: 50%;
+}
+.dish-add:hover {
+  background: #f28c50;
+  border-color: #f28c50;
+}
+.about-section {
+  background: #1a1c18;
+}
+.about-label {
+  background: var(--yellow);
+  color: #171713;
+}
+.about-small {
+  border-color: #1a1c18;
+}
+.about-copy > p:not(.eyebrow),
+.service p,
+.menu-note,
+.faq-list details p {
+  color: #b7b5ab;
+}
+.service {
+  background: #1a1c18;
+  border-color: #ffffff12;
+}
+.service-number {
+  color: var(--yellow);
+}
+.review-card,
+.faq-list details {
+  background: #1a1c18;
+  border-color: var(--line);
+  color: var(--ink);
+}
+.review-card p,
+.faq-list details p {
+  color: #b7b5ab;
+}
+.reviews-section {
+  padding: 84px 0;
+  background: #22231e;
+  overflow: hidden;
+}
+.reviews-panel {
+  min-height: 390px;
+  display: grid;
+  grid-template-columns: 1fr 0.85fr;
+  align-items: center;
+  gap: 55px;
+}
+.reviews-copy .eyebrow {
+  color: var(--yellow);
+  margin-bottom: 18px;
+}
+.reviews-copy h2 {
+  color: #fffaf0;
+  margin-bottom: 20px;
+}
+.reviews-copy > p:not(.eyebrow) {
+  max-width: 510px;
+  color: #c3c0b5;
+  margin-bottom: 25px;
+}
+.button-light {
+  color: #171713;
+  background: #f4f0e8;
+}
+.button-light:hover {
+  background: var(--yellow);
+}
+.reviews-art {
+  position: relative;
+  height: 330px;
+}
+.reviews-art > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 16px 130px 16px 16px;
+  filter: saturate(0.88);
+}
+.reviews-stamp {
+  position: absolute;
+  right: -16px;
+  bottom: 20px;
+  width: 156px;
+  height: 156px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transform: rotate(9deg);
+  color: #171713;
+  background: var(--yellow);
+  box-shadow: 0 15px 40px #0005;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 1.2px;
+}
+.reviews-stamp b {
+  font-size: 15px;
+  letter-spacing: 1px;
+}
+.instagram-section {
+  display: none;
+}
+.faq-section {
+  color: var(--ink);
+}
+.faq-list summary:after {
+  color: var(--yellow);
+}
+.footer {
+  background: #0b0c0a;
+  color: #f4f0e8;
+}
+.footer a:hover {
+  color: var(--yellow);
+}
+.mobile-order {
+  background: #121310f2;
+  border-color: #ffffff18;
+  backdrop-filter: blur(12px);
+}
+#cart-dialog {
+  background: #171915;
+  color: var(--ink);
+}
+.cart-line,
+.checkout-form input,
+.checkout-form select,
+.checkout-form textarea {
+  background: #20221d;
+  border-color: var(--line);
+  color: var(--ink);
+}
+
+@media (max-width: 800px) {
+  .reviews-section {
+    padding: 54px 0;
+  }
+  .reviews-panel {
+    min-height: 0;
+    grid-template-columns: 1fr 0.72fr;
+    gap: 20px;
+  }
+  .reviews-art {
+    height: 240px;
+  }
+  .reviews-stamp {
+    width: 112px;
+    height: 112px;
+    right: -7px;
+    font-size: 8px;
+  }
+  .reviews-stamp b {
+    font-size: 11px;
+  }
+}
+@media (max-width: 580px) {
+  .wrap {
+    width: calc(100% - 30px);
+  }
+  .header-inner {
+    height: 66px;
+    gap: 8px;
+  }
+  .brand-word {
+    font-size: 32px;
+  }
+  .brand-sub {
+    font-size: 6px;
+    letter-spacing: 2.2px;
+    margin-top: 4px;
+  }
+  .header-phone {
+    display: none;
+  }
+  .bag-button {
+    min-height: 38px;
+    padding: 0 12px;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(105px, 0.7fr);
+    gap: 10px;
+    padding: 27px 0 24px;
+  }
+  .hero-copy {
+    width: auto;
+  }
+  .hero-copy .eyebrow {
+    font-size: 8px;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+  }
+  .hero h1 {
+    font-size: clamp(35px, 10vw, 47px);
+    letter-spacing: -2.5px;
+    line-height: 0.98;
+    margin-bottom: 12px;
+  }
+  .hero-description {
+    font-size: 11px;
+    line-height: 1.5;
+    margin-bottom: 14px;
+  }
+  .desktop-break {
+    display: none;
+  }
+  .hero-ctas {
+    display: flex;
+    gap: 8px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .hero-ctas .button {
+    min-height: 42px;
+    padding: 0 12px;
+    font-size: 10px;
+  }
+  .hero-ctas .button span {
+    display: none;
+  }
+  .hero-ctas .text-link {
+    display: none;
+  }
+  .hero-bottom {
+    font-size: 8px;
+    gap: 5px;
+    margin-top: 13px;
+    flex-wrap: wrap;
+  }
+  .hero-art {
+    height: 250px;
+    min-width: 0;
+    padding: 0;
+  }
+  .hero-photo {
+    height: 235px;
+    border-radius: 90px 90px 12px 12px;
+    transform: rotate(2deg);
+  }
+  .photo-caption,
+  .round-sticker,
+  .photo-note,
+  .art-spark {
+    display: none;
+  }
+  .flavour-strip {
+    min-height: 44px;
+  }
+  .flavour-track {
+    gap: 18px;
+  }
+  .flavour-strip span {
+    font-size: 11px;
+  }
+  .menu-section {
+    padding: 36px 0 34px;
+  }
+  .section-heading {
+    margin-bottom: 18px;
+    gap: 8px;
+  }
+  .section-heading .eyebrow {
+    font-size: 8px;
+    margin-bottom: 8px;
+  }
+  .section-heading h2 {
+    font-size: clamp(25px, 7.5vw, 34px);
+    letter-spacing: -1.5px;
+  }
+  .section-heading > p {
+    font-size: 9px;
+    line-height: 1.4;
+  }
+  .category-tabs {
+    gap: 7px;
+    padding: 2px 0 10px;
+    margin-right: -15px;
+  }
+  .category-tab {
+    flex: none;
+    min-height: 37px;
+    border-radius: 30px;
+    padding: 7px 11px;
+    gap: 6px;
+    font-size: 9px;
+  }
+  .category-icon {
+    font-size: 15px;
+  }
+  .category-icon .ui-icon {
+    width: 16px;
+    height: 16px;
+  }
+  .menu-toolbar {
+    display: grid;
+    grid-template-columns: 0.82fr 1.18fr;
+    gap: 7px;
+    margin: 8px 0 18px;
+  }
+  .group-wrap {
+    min-width: 0;
+  }
+  .group-wrap select,
+  input[type="search"] {
+    min-height: 39px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    font-size: 10px;
+  }
+  .search-wrap {
+    width: 100%;
+  }
+  .search-wrap svg {
+    width: 15px;
+    left: 10px;
+  }
+  input[type="search"] {
+    padding-left: 32px;
+    padding-right: 30px;
+  }
+  #clear-search {
+    height: 36px;
+    width: 30px;
+  }
+  .menu-result-heading {
+    margin-bottom: 10px;
+  }
+  .menu-result-heading h3 {
+    font-size: 15px;
+  }
+  .menu-result-heading span {
+    font-size: 9px;
+  }
+  .menu-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 9px;
+  }
+  .dish {
+    border-radius: 10px;
+  }
+  .dish-photo {
+    height: clamp(86px, 27vw, 125px);
+  }
+  .dish-photo-label {
+    left: 8px;
+    bottom: 7px;
+    font-size: 7px;
+    letter-spacing: 0.6px;
+  }
+  .dish-content {
+    padding: 9px 9px 10px;
+  }
+  .dish-meta {
+    font-size: 7px;
+    min-height: 12px;
+    gap: 4px;
+    margin-bottom: 5px;
+    letter-spacing: 0.4px;
+  }
+  .dish-tag {
+    padding: 1px 4px;
+    font-size: 6px;
+  }
+  .dish h4 {
+    font-size: 12px;
+    line-height: 1.25;
+    margin-bottom: 5px;
+  }
+  .dish-description {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    font-size: 9px;
+    line-height: 1.35;
+    margin-bottom: 8px;
+  }
+  .dish-price {
+    font-size: 15px;
+  }
+  .dish-price small {
+    font-size: 9px;
+  }
+  .dish-add {
+    min-width: 31px;
+    min-height: 31px;
+  }
+  .dish-add .ui-icon {
+    width: 15px;
+    height: 15px;
+  }
+  .menu-more {
+    margin-top: 16px;
+  }
+  .menu-more .button {
+    min-height: 42px;
+    font-size: 11px;
+  }
+  .menu-note {
+    margin-top: 15px;
+    font-size: 9px;
+  }
+  .about-section,
+  .delivery-section {
+    padding: 38px 0;
+  }
+  .about-grid {
+    gap: 18px;
+  }
+  .about-photos {
+    min-height: 225px;
+  }
+  .about-main {
+    width: 69%;
+    height: 210px;
+  }
+  .about-small {
+    width: 42%;
+    height: 132px;
+  }
+  .about-copy h2 {
+    font-size: 29px;
+    margin-bottom: 13px;
+  }
+  .about-copy > p:not(.eyebrow) {
+    font-size: 10px;
+    line-height: 1.55;
+    margin-bottom: 8px;
+  }
+  .service-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+  .service {
+    padding: 14px;
+  }
+  .service h3 {
+    font-size: 15px;
+  }
+  .service p {
+    font-size: 10px;
+    line-height: 1.45;
+  }
+  .reviews-section {
+    padding: 35px 0;
+  }
+  .reviews-panel {
+    grid-template-columns: 1fr 0.65fr;
+    gap: 10px;
+  }
+  .reviews-copy .eyebrow {
+    font-size: 8px;
+    margin-bottom: 9px;
+  }
+  .reviews-copy h2 {
+    font-size: 28px;
+    letter-spacing: -1.5px;
+    margin-bottom: 10px;
+  }
+  .reviews-copy > p:not(.eyebrow) {
+    font-size: 10px;
+    line-height: 1.45;
+    margin-bottom: 12px;
+  }
+  .reviews-copy .button {
+    min-height: 38px;
+    padding: 0 10px;
+    font-size: 9px;
+  }
+  .reviews-art {
+    height: 180px;
+  }
+  .reviews-art > img {
+    border-radius: 12px 70px 12px 12px;
+  }
+  .reviews-stamp {
+    width: 75px;
+    height: 75px;
+    right: -5px;
+    bottom: 7px;
+    gap: 4px;
+    font-size: 6px;
+    letter-spacing: 0.5px;
+  }
+  .reviews-stamp b {
+    font-size: 8px;
+  }
+  .faq-section {
+    padding: 38px 0;
+    gap: 20px;
+  }
+  .faq-section h2 {
+    font-size: 30px;
+  }
+  .faq-list summary {
+    min-height: 50px;
+    font-size: 12px;
+  }
+  .footer {
+    padding-top: 34px;
+  }
+}
