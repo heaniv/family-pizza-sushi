@@ -52,3 +52,5 @@ npm run dev
 - Тарифних зон доставки й автоматичного розрахунку вартості немає.
 - Telegram ID клієнта приймається лише після серверної перевірки `Telegram.WebApp.initData`.
 - Адміністративні callback-кнопки працюють тільки для ID з `TELEGRAM_ADMIN_IDS` і в `TELEGRAM_ADMIN_CHAT_ID`.
+- Команди `/start` і `/menu` доступні в приватному чаті. У робочій групі адмін бачить `/orders` і `/chatid` у меню команд.
+- Зареєструйте меню Telegram командою `npm run telegram:commands` після налаштування локального `.env`.

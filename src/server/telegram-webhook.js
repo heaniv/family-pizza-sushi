@@ -67,6 +67,22 @@ async function handleStart(message) {
   });
 }
 
+async function handleMenuCommand(message) {
+  if (message.chat.type !== "private") return;
+
+  await telegram("sendMessage", {
+    chat_id: message.chat.id,
+    text: "Оберіть страви та оформіть замовлення на сайті Family Pizza Sushi.",
+    reply_markup: {
+      keyboard: [
+        [{ text: "🍕 Меню та замовлення", web_app: { url: siteUrl() } }],
+      ],
+      resize_keyboard: true,
+      is_persistent: true,
+    },
+  });
+}
+
 async function handleOrdersCommand(message) {
   if (!isAdmin(message.from?.id) || !isAdminChat(message.chat.id)) return;
 
@@ -167,6 +183,10 @@ async function handleMessage(message) {
 
   if (command === "/start") {
     await handleStart(message);
+    return;
+  }
+  if (command === "/menu") {
+    await handleMenuCommand(message);
     return;
   }
   if (command === "/orders") {
