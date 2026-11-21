@@ -26,6 +26,30 @@ let category = "pizza",
   cart = [],
   toastTimer,
   lastTrigger;
+let pendingRequestId;
+const telegramWebApp = window.Telegram?.WebApp;
+const ordersEnabled =
+  document.querySelector('meta[name="orders-enabled"]')?.content === "true";
+telegramWebApp?.ready();
+telegramWebApp?.expand();
+if (!ordersEnabled) {
+  $("#checkout-toggle").hidden = true;
+  $("#telegram-order-link").hidden = true;
+  $("#cart-explanation").textContent =
+    "Щоб оформити замовлення, зателефонуйте нам. Вартість доставки підтвердить адміністратор; оплата — при отриманні.";
+}
+const telegramUsername = document
+  .querySelector('meta[name="telegram-bot-username"]')
+  ?.content.replace(/^@/, "");
+if (
+  ordersEnabled &&
+  telegramUsername &&
+  /^[A-Za-z0-9_]{5,32}$/.test(telegramUsername)
+) {
+  const telegramLink = $("#telegram-order-link");
+  telegramLink.href = `https://t.me/${telegramUsername}`;
+  telegramLink.hidden = false;
+}
 try {
   cart = validCart(JSON.parse(localStorage.getItem(STORAGE) || "[]"));
 } catch {}
@@ -120,6 +144,11 @@ function renderCart() {
 }
 function openCart(trigger) {
   lastTrigger = trigger;
+  $("#order-result").hidden = true;
+  $("#cart-footer").classList.remove("checkout-open");
+  $("#checkout-form").hidden = true;
+  $("#checkout-toggle").hidden = !ordersEnabled;
+  $("#checkout-error").hidden = true;
   $("#cart-dialog").showModal();
   document.body.classList.add("modal-open");
   $("#close-cart").focus();
@@ -132,6 +161,75 @@ $("#cart-dialog").addEventListener("close", () => {
   lastTrigger?.focus();
 });
 $("#close-cart").addEventListener("click", closeCart);
+$("#checkout-toggle").addEventListener("click", () => {
+  $("#checkout-form").hidden = false;
+  $("#checkout-toggle").hidden = true;
+  $("#cart-footer").classList.add("checkout-open");
+  $("#checkout-form [name=customerName]").focus();
+});
+$("#checkout-form [name=fulfillment]").addEventListener("change", (event) => {
+  const isDelivery = event.target.value === "delivery";
+  const addressField = $("#delivery-address-field");
+  addressField.hidden = !isDelivery;
+  addressField.querySelector("textarea").required = isDelivery;
+});
+$("#checkout-form").addEventListener("input", () => {
+  pendingRequestId = null;
+  $("#checkout-error").hidden = true;
+});
+$("#checkout-form").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  if (!cart.length) return;
+
+  const form = event.currentTarget;
+  const submitButton = $("#submit-order");
+  const errorMessage = $("#checkout-error");
+  const originalLabel = submitButton.textContent;
+  const values = new FormData(form);
+  pendingRequestId ||= crypto.randomUUID();
+  submitButton.disabled = true;
+  submitButton.textContent = "Надсилаємо…";
+  errorMessage.hidden = true;
+
+  try {
+    const response = await fetch("/api/orders", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        requestId: pendingRequestId,
+        customer: {
+          name: values.get("customerName"),
+          phone: values.get("phone"),
+        },
+        fulfillment: values.get("fulfillment"),
+        address: values.get("address"),
+        note: values.get("note"),
+        items: cart.map((item) => ({ id: item.id, quantity: item.qty })),
+        telegramInitData: telegramWebApp?.initData || undefined,
+      }),
+    });
+    const result = await response.json();
+    if (!response.ok)
+      throw new Error(result.error || "Не вдалося надіслати замовлення.");
+
+    cart = [];
+    pendingRequestId = null;
+    try {
+      localStorage.setItem(STORAGE, JSON.stringify(cart));
+    } catch {}
+    renderCart();
+    $("#cart-footer").hidden = true;
+    $("#order-result").innerHTML =
+      `<h3>Дякуємо за замовлення!</h3><p>Номер замовлення: <strong>№${escape(result.orderNumber)}</strong></p><p>Адміністратор підтвердить замовлення та вартість доставки. Оплата — при отриманні.</p>${result.notificationPending ? '<p>Для швидкого підтвердження телефонуйте <a href="tel:+380997206560">099 720 65 60</a>.</p>' : ""}`;
+    $("#order-result").hidden = false;
+  } catch (error) {
+    errorMessage.textContent = error.message;
+    errorMessage.hidden = false;
+  } finally {
+    submitButton.disabled = false;
+    submitButton.textContent = originalLabel;
+  }
+});
 $("#cart-dialog").addEventListener("click", (e) => {
   if (e.target === $("#cart-dialog")) {
     const r = e.target.getBoundingClientRect();

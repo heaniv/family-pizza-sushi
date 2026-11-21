@@ -1,0 +1,15 @@
+import { neon } from "@neondatabase/serverless";
+
+let query;
+
+export function db() {
+  if (query) return query;
+
+  const connectionString = process.env.DATABASE_URL;
+  if (!connectionString) {
+    throw new Error("DATABASE_URL is not configured");
+  }
+
+  query = neon(connectionString);
+  return query;
+}

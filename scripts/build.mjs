@@ -1,6 +1,9 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { loadLocalEnv } from "./load-env.mjs";
+
+await loadLocalEnv();
 
 const projectRoot = fileURLToPath(new URL("../", import.meta.url));
 const sourceRoot = path.join(projectRoot, "src");
@@ -37,6 +40,24 @@ const configuredHost =
   process.env.SITE_URL ||
   process.env.VERCEL_PROJECT_PRODUCTION_URL ||
   process.env.VERCEL_URL;
+const htmlFile = path.join(outputRoot, "index.html");
+let html = await fs.readFile(htmlFile, "utf8");
+
+html = html.replace(
+  '<meta name="orders-enabled" content="false">',
+  `<meta name="orders-enabled" content="${process.env.ORDERS_ENABLED === "true" ? "true" : "false"}">`,
+);
+
+const botUsername = (process.env.TELEGRAM_BOT_USERNAME || "").replace(/^@/, "");
+if (botUsername && !/^[A-Za-z0-9_]{5,32}$/.test(botUsername)) {
+  throw new Error("TELEGRAM_BOT_USERNAME must be a valid public bot username.");
+}
+if (botUsername) {
+  html = html.replace(
+    "</head>",
+    `<meta name="telegram-bot-username" content="${botUsername}"></head>`,
+  );
+}
 
 if (configuredHost) {
   const url = new URL(
@@ -50,9 +71,6 @@ if (configuredHost) {
   }
 
   const origin = url.origin;
-  const htmlFile = path.join(outputRoot, "index.html");
-  let html = await fs.readFile(htmlFile, "utf8");
-
   html = html.replace(
     /<script type="application\/ld\+json">([\s\S]*?)<\/script>/,
     (_, json) => {
@@ -65,9 +83,9 @@ if (configuredHost) {
     "</head>",
     `<link rel="canonical" href="${origin}/"><meta property="og:url" content="${origin}/"><meta property="og:image" content="${origin}/assets/sushi.webp"></head>`,
   );
-
-  await fs.writeFile(htmlFile, html);
 }
+
+await fs.writeFile(htmlFile, html);
 
 console.log(
   `Static site built in dist/${configuredHost ? ` for ${configuredHost}` : ""}`,

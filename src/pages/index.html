@@ -16,9 +16,11 @@
     />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="uk_UA" />
+    <meta name="orders-enabled" content="false" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="/styles/fonts.css" />
     <link rel="stylesheet" href="/styles/style.css" />
+    <script src="https://telegram.org/js/telegram-web-app.js?65"></script>
     <link
       rel="preload"
       href="/assets/sushi.webp"
@@ -889,10 +891,71 @@
           <div class="cart-total">
             <span>Орієнтовна сума</span><strong id="cart-total">0 ₴</strong>
           </div>
-          <p class="cart-explanation">
-            Без вартості доставки. Щоб оформити замовлення, зателефонуйте та
-            назвіть обрані страви. Цей список ще не надіслано кафе.
+          <p class="cart-explanation" id="cart-explanation">
+            Адміністратор підтвердить замовлення та вартість доставки. Оплата —
+            при отриманні.
           </p>
+          <button class="button button-dark" id="checkout-toggle" type="button">
+            Оформити замовлення
+          </button>
+          <a
+            class="button button-outline"
+            id="telegram-order-link"
+            href="#"
+            target="_blank"
+            rel="noopener noreferrer"
+            hidden
+          >
+            Замовити через Telegram
+          </a>
+          <form id="checkout-form" class="checkout-form" hidden>
+            <label>
+              Ваше ім’я
+              <input
+                name="customerName"
+                autocomplete="name"
+                maxlength="100"
+                required
+              />
+            </label>
+            <label>
+              Номер телефону
+              <input
+                name="phone"
+                type="tel"
+                autocomplete="tel"
+                inputmode="tel"
+                placeholder="+380…"
+                maxlength="30"
+                required
+              />
+            </label>
+            <label>
+              Як отримати замовлення?
+              <select name="fulfillment" required>
+                <option value="delivery">Доставка</option>
+                <option value="pickup">Самовивіз</option>
+              </select>
+            </label>
+            <label id="delivery-address-field">
+              Адреса доставки
+              <textarea name="address" maxlength="300" required></textarea>
+            </label>
+            <label>
+              Коментар до замовлення
+              <span class="checkout-optional">необов’язково</span>
+              <textarea name="note" maxlength="500"></textarea>
+            </label>
+            <p
+              id="checkout-error"
+              class="checkout-error"
+              role="alert"
+              hidden
+            ></p>
+            <button class="button button-dark" id="submit-order" type="submit">
+              Підтвердити замовлення
+            </button>
+          </form>
           <button class="button button-outline" id="copy-order">
             Скопіювати список
             <span
@@ -922,6 +985,12 @@
                 <path d="M5 19 19 5M5 5h14v14" /></svg></span></a
           ><button class="clear-cart" id="clear-cart">Очистити список</button>
         </div>
+        <div
+          id="order-result"
+          class="order-result"
+          aria-live="polite"
+          hidden
+        ></div>
       </div>
     </dialog>
     <div id="toast" role="status" aria-live="polite"></div>
