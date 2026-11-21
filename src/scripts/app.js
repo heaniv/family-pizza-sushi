@@ -6,7 +6,6 @@ import {
   validCart,
   total,
   money,
-  orderText,
 } from "./core.js";
 const $ = (s) => document.querySelector(s),
   $$ = (s) => [...document.querySelectorAll(s)];
@@ -34,21 +33,8 @@ telegramWebApp?.ready();
 telegramWebApp?.expand();
 if (!ordersEnabled) {
   $("#checkout-toggle").hidden = true;
-  $("#telegram-order-link").hidden = true;
   $("#cart-explanation").textContent =
     "Щоб оформити замовлення, зателефонуйте нам. Вартість доставки підтвердить адміністратор; оплата — при отриманні.";
-}
-const telegramUsername = document
-  .querySelector('meta[name="telegram-bot-username"]')
-  ?.content.replace(/^@/, "");
-if (
-  ordersEnabled &&
-  telegramUsername &&
-  /^[A-Za-z0-9_]{5,32}$/.test(telegramUsername)
-) {
-  const telegramLink = $("#telegram-order-link");
-  telegramLink.href = `https://t.me/${telegramUsername}`;
-  telegramLink.hidden = false;
 }
 try {
   cart = validCart(JSON.parse(localStorage.getItem(STORAGE) || "[]"));
@@ -144,7 +130,6 @@ function renderCart() {
     `Відкрити список замовлення: ${count} шт.`,
   );
   $("#cart-footer").hidden = !cart.length;
-  $("#copy-fallback").hidden = true;
   $("#cart-total").textContent = money(total(cart));
   $("#cart-items").innerHTML = cart.length
     ? cart
@@ -333,27 +318,6 @@ $("#clear-cart").addEventListener("click", () => {
   save();
   notify("Список очищено");
   $("[data-back-menu]").focus();
-});
-$("#copy-order").addEventListener("click", async () => {
-  const text = orderText(cart);
-  try {
-    if (!navigator.clipboard?.writeText) throw Error();
-    await navigator.clipboard.writeText(text);
-    notify("Список скопійовано");
-    $("#copy-order").innerHTML = `Скопійовано ${icon("check")}`;
-    setTimeout(
-      () =>
-        ($("#copy-order").innerHTML =
-          `Скопіювати список <span>${icon("arrow")}</span>`),
-      2300,
-    );
-  } catch {
-    $("#copy-fallback").value = text;
-    $("#copy-fallback").hidden = false;
-    $("#copy-fallback").focus();
-    $("#copy-fallback").select();
-    notify("Виділіть і скопіюйте текст зі списку");
-  }
 });
 const toggle = $(".nav-toggle"),
   nav = $("#mobile-nav");

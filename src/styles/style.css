@@ -1722,8 +1722,7 @@ dialog::backdrop {
 
 .checkout-form input,
 .checkout-form select,
-.checkout-form textarea,
-#copy-fallback {
+.checkout-form textarea {
   width: 100%;
   min-height: 42px;
   padding: 9px 11px;
@@ -1748,11 +1747,6 @@ dialog::backdrop {
   color: #ff9e91;
   font-size: 11px;
   line-height: 1.5;
-}
-
-#copy-fallback {
-  height: 92px;
-  margin-top: 9px;
 }
 
 .order-result {
