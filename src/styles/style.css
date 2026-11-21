@@ -2256,6 +2256,29 @@ body {
   background: #f28c50;
   border-color: #f28c50;
 }
+.dish.is-adding {
+  animation: dish-added 650ms ease-out;
+}
+.dish-add.is-added .ui-icon {
+  animation: add-confirm 550ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+@keyframes dish-added {
+  0% { box-shadow: 0 0 0 0 #e8793d00; }
+  35% { box-shadow: 0 0 0 4px #e8793d99, 0 14px 32px #0002; }
+  100% { box-shadow: 0 14px 32px #0002; }
+}
+@keyframes add-confirm {
+  0% { transform: scale(1) rotate(0); }
+  40% { transform: scale(0.68) rotate(-45deg); }
+  75% { transform: scale(1.18) rotate(12deg); }
+  100% { transform: scale(1) rotate(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dish.is-adding,
+  .dish-add.is-added .ui-icon {
+    animation: none;
+  }
+}
 .about-section {
   background: #1a1c18;
 }

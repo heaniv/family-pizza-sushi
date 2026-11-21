@@ -118,6 +118,19 @@ function notify(text) {
   $("#toast").classList.add("show");
   toastTimer = setTimeout(() => $("#toast").classList.remove("show"), 2700);
 }
+function animateAdded(button) {
+  const card = button.closest(".dish");
+  if (!card) return;
+  card.classList.remove("is-adding");
+  button.classList.remove("is-added");
+  void card.offsetWidth;
+  card.classList.add("is-adding");
+  button.classList.add("is-added");
+  setTimeout(() => {
+    card.classList.remove("is-adding");
+    button.classList.remove("is-added");
+  }, 700);
+}
 function save() {
   try {
     localStorage.setItem(STORAGE, JSON.stringify(cart));
@@ -259,6 +272,7 @@ document.addEventListener("click", (e) => {
     if (r) r.qty++;
     else cart.push({ id: i.id, qty: 1 });
     save();
+    animateAdded(b);
     notify(`${i.name} — додано до списку`);
   }
   if (b.dataset.remove) {
