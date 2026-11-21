@@ -45,7 +45,7 @@ let html = await fs.readFile(htmlFile, "utf8");
 
 const ordersEnabled = process.env.ORDERS_ENABLED === "true";
 html = html.replace(
-  '<meta name="orders-enabled" content="false">',
+  /<meta name="orders-enabled" content="(?:true|false)"\s*\/?\s*>/,
   `<meta name="orders-enabled" content="${ordersEnabled}">`,
 );
 
