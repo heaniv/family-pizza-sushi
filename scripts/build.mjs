@@ -43,9 +43,10 @@ const configuredHost =
 const htmlFile = path.join(outputRoot, "index.html");
 let html = await fs.readFile(htmlFile, "utf8");
 
+const ordersEnabled = process.env.ORDERS_ENABLED === "true";
 html = html.replace(
   '<meta name="orders-enabled" content="false">',
-  `<meta name="orders-enabled" content="${process.env.ORDERS_ENABLED === "true" ? "true" : "false"}">`,
+  `<meta name="orders-enabled" content="${ordersEnabled}">`,
 );
 
 const botUsername = (process.env.TELEGRAM_BOT_USERNAME || "").replace(/^@/, "");
@@ -90,3 +91,4 @@ await fs.writeFile(htmlFile, html);
 console.log(
   `Static site built in dist/${configuredHost ? ` for ${configuredHost}` : ""}`,
 );
+console.log(`Online ordering: ${ordersEnabled ? "enabled" : "disabled"}`);
