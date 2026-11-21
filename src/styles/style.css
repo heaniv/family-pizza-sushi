@@ -2081,6 +2081,11 @@ dialog::backdrop {
   --line: #373831;
   --white: #1b1d19;
   --green: #263d31;
+  --accent-sun: #f4cf70;
+  --accent-herb: #91a77d;
+  --accent-salmon: #d98978;
+  --accent-sea: #83b8b1;
+  --accent-berry: #b69aca;
 }
 html {
   background: var(--paper);
@@ -2130,7 +2135,7 @@ body {
   box-shadow: 0 20px 50px #0005;
 }
 .round-sticker {
-  background: var(--yellow);
+  background: var(--accent-sun);
   color: #171713;
 }
 .button-dark {
@@ -2170,6 +2175,27 @@ body {
   background: var(--yellow);
   color: #171713;
   border-color: var(--yellow);
+}
+.category-tab[data-category="pizza"] .category-icon {
+  color: var(--accent-sun);
+}
+.category-tab[data-category="sushi"] .category-icon {
+  color: var(--accent-salmon);
+}
+.category-tab[data-category="hot"] .category-icon {
+  color: var(--yellow);
+}
+.category-tab[data-category="salads"] .category-icon {
+  color: var(--accent-herb);
+}
+.category-tab[data-category="sides"] .category-icon {
+  color: var(--accent-sea);
+}
+.category-tab[data-category="desserts"] .category-icon {
+  color: var(--accent-berry);
+}
+.category-tab[aria-pressed="true"] .category-icon {
+  color: #171713;
 }
 .group-wrap select,
 .search-wrap input[type="search"] {
@@ -2249,7 +2275,7 @@ body {
   background: #1a1c18;
 }
 .about-label {
-  background: var(--yellow);
+  background: var(--accent-herb);
   color: #171713;
 }
 .about-small {
@@ -2267,6 +2293,12 @@ body {
 }
 .service-number {
   color: var(--yellow);
+}
+.service:nth-child(1) .service-number {
+  color: var(--accent-herb);
+}
+.service:nth-child(2) .service-number {
+  color: var(--accent-sea);
 }
 .review-card,
 .faq-list details {
@@ -2365,6 +2397,22 @@ body {
   background: #121310f2;
   border-color: #ffffff18;
   backdrop-filter: blur(12px);
+}
+.yellow-service {
+  background: var(--accent-sun);
+  border-color: var(--accent-sun);
+  color: #171713;
+}
+.yellow-service h3,
+.yellow-service a {
+  color: #171713;
+}
+.yellow-service .service-number,
+.yellow-service p {
+  color: #4b4636;
+}
+.yellow-service > a {
+  border-color: #17171338;
 }
 #cart-dialog {
   background-color: #171915;
