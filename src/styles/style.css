@@ -2193,40 +2193,6 @@ body {
   border-color: #e8793d88;
   transform: translateY(-3px);
 }
-.dish-photo {
-  height: 190px;
-  position: relative;
-  overflow: hidden;
-  background: #24251f;
-}
-.dish-photo img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.45s ease;
-}
-.dish:hover .dish-photo img {
-  transform: scale(1.045);
-}
-.dish-photo:after {
-  content: "";
-  position: absolute;
-  inset: 40% 0 0;
-  background: linear-gradient(transparent, #111310a8);
-  pointer-events: none;
-}
-.dish-photo-label {
-  position: absolute;
-  z-index: 1;
-  left: 13px;
-  bottom: 12px;
-  color: #fff;
-  font-size: 9px;
-  font-weight: 800;
-  letter-spacing: 1.4px;
-  text-transform: uppercase;
-  text-shadow: 0 1px 8px #0008;
-}
 .dish-content {
   padding: 17px 18px 18px;
   display: flex;
@@ -2619,15 +2585,6 @@ body {
   }
   .dish {
     border-radius: 10px;
-  }
-  .dish-photo {
-    height: clamp(86px, 27vw, 125px);
-  }
-  .dish-photo-label {
-    left: 8px;
-    bottom: 7px;
-    font-size: 7px;
-    letter-spacing: 0.6px;
   }
   .dish-content {
     padding: 9px 9px 10px;
