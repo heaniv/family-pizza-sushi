@@ -424,7 +424,7 @@ h3 {
   gap: 46px;
   align-items: center;
   width: max-content;
-  padding-left: 24px;
+  padding-left: max(56px, calc((100% - 1280px) / 2));
   font-size: 12px;
   font-weight: 800;
   letter-spacing: 3px;
@@ -1197,6 +1197,9 @@ dialog::backdrop {
   .wrap {
     width: calc(100% - 64px);
   }
+  .flavour-strip > div {
+    padding-left: 32px;
+  }
   .desktop-nav {
     gap: 18px;
   }
@@ -1568,7 +1571,7 @@ dialog::backdrop {
   }
   .flavour-strip > div {
     gap: 27px;
-    padding-left: 16px;
+    padding-left: 20px;
     font-size: 9px;
     letter-spacing: 2px;
   }
