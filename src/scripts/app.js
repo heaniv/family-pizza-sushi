@@ -217,8 +217,11 @@ $("#checkout-form").addEventListener("submit", async (event) => {
     } catch {}
     renderCart();
     $("#cart-footer").hidden = true;
+    const trackingAction = result.telegramLink
+      ? `<a class="button button-dark tracking-link" href="${escape(result.telegramLink)}" target="_blank" rel="noopener noreferrer">Статус замовлення у Telegram <span>↗</span></a><p class="tracking-note">Натисніть Start у боті, щоб отримувати оновлення про замовлення.</p>`
+      : "";
     $("#order-result").innerHTML =
-      `<h3>Дякуємо за замовлення!</h3><p>Номер замовлення: <strong>№${escape(result.orderNumber)}</strong></p><p>Адміністратор підтвердить замовлення та вартість доставки. Оплата — при отриманні.</p>${result.notificationPending ? '<p>Для швидкого підтвердження телефонуйте <a href="tel:+380997206560">099 720 65 60</a>.</p>' : ""}`;
+      `<h3>Дякуємо за замовлення!</h3><p>Номер замовлення: <strong>№${escape(result.orderNumber)}</strong></p><p>Адміністратор підтвердить замовлення та вартість доставки. Оплата — при отриманні.</p>${trackingAction}${result.notificationPending ? '<p>Для швидкого підтвердження телефонуйте <a href="tel:+380997206560">099 720 65 60</a>.</p>' : ""}`;
     $("#order-result").hidden = false;
   } catch (error) {
     errorMessage.textContent = error.message;

@@ -8,6 +8,7 @@ import {
 import { verifyWebAppInitData } from "../src/server/telegram-auth.js";
 import { adminChatId, telegram } from "../src/server/telegram-api.js";
 import { orderKeyboard, orderSummary } from "../src/server/order-message.js";
+import { createOrderTrackingLink } from "../src/server/order-tracking.js";
 
 const JSON_HEADERS = { "content-type": "application/json; charset=utf-8" };
 const MAX_BODY_BYTES = 32 * 1024;
@@ -154,6 +155,7 @@ export default {
           order.delivery_fee_uah == null
             ? null
             : Number(order.delivery_fee_uah),
+        telegramLink: createOrderTrackingLink(order),
         notificationPending,
       },
       created ? 201 : 200,

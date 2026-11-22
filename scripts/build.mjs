@@ -53,12 +53,6 @@ const botUsername = (process.env.TELEGRAM_BOT_USERNAME || "").replace(/^@/, "");
 if (botUsername && !/^[A-Za-z0-9_]{5,32}$/.test(botUsername)) {
   throw new Error("TELEGRAM_BOT_USERNAME must be a valid public bot username.");
 }
-if (botUsername) {
-  html = html.replace(
-    "</head>",
-    `<meta name="telegram-bot-username" content="${botUsername}"></head>`,
-  );
-}
 
 if (configuredHost) {
   const url = new URL(

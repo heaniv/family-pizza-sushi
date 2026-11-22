@@ -1,5 +1,3 @@
-import { couriers } from "./telegram-api.js";
-
 const STATUS_LABELS = {
   new: "Нове",
   accepted: "Прийняте",
@@ -72,11 +70,76 @@ export function orderSummary(order) {
   const total =
     Number(order.subtotal_uah) + Number(order.delivery_fee_uah || 0);
   lines.push(`Разом: ${formatUah(total)}`, "Оплата: при отриманні");
-  if (order.assigned_courier_name) {
-    lines.push(`Кур’єр: ${order.assigned_courier_name}`);
-  }
 
   return lines.join("\n");
+}
+
+const CUSTOMER_STATUS = {
+  new: "Замовлення отримано — очікує підтвердження кафе.",
+  accepted: "Замовлення прийняте в роботу.",
+  preparing: "Кухня готує ваше замовлення.",
+  ready: {
+    delivery: "Замовлення готове та очікує доставки.",
+    pickup: "Замовлення готове до самовивозу.",
+  },
+  on_delivery: "Замовлення вже в дорозі.",
+  delivered: "Замовлення доставлено. Смачного!",
+  cancelled:
+    "Замовлення скасовано. Якщо це сталося помилково, зателефонуйте нам.",
+};
+
+export function customerOrderSummary(order) {
+  const number = String(order.order_number).padStart(5, "0");
+  const status = CUSTOMER_STATUS[order.status];
+  const lines = [
+    `🍽 FAMILY · замовлення №${number}`,
+    "",
+    `Статус: ${
+      typeof status === "object"
+        ? status[order.fulfillment_type]
+        : status || STATUS_LABELS[order.status] || order.status
+    }`,
+    `Отримання: ${order.fulfillment_type === "delivery" ? "доставка" : "самовивіз"}`,
+    "",
+    "Ваше замовлення:",
+  ];
+
+  for (const item of order.items || []) {
+    lines.push(
+      `• ${item.item_name} × ${item.quantity} — ${formatUah(item.line_total_uah)}`,
+    );
+  }
+
+  lines.push(`\nСума страв: ${formatUah(order.subtotal_uah)}`);
+  if (order.fulfillment_type === "delivery") {
+    lines.push(
+      order.delivery_fee_uah == null
+        ? "Доставка: вартість уточнює адміністратор"
+        : `Доставка: ${formatUah(order.delivery_fee_uah)}`,
+    );
+  }
+  const total = Number(order.subtotal_uah) + Number(order.delivery_fee_uah || 0);
+  const checkedAt = new Intl.DateTimeFormat("uk-UA", {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    timeZone: "Europe/Kyiv",
+  }).format(new Date());
+  lines.push(
+    `Разом: ${formatUah(total)}`,
+    "Оплата: при отриманні.",
+    `Перевірено о ${checkedAt}`,
+  );
+
+  return lines.join("\n");
+}
+
+export function customerOrderKeyboard(order) {
+  return {
+    inline_keyboard: [
+      [{ text: "🔄 Оновити статус", callback_data: `ct:${order.id}` }],
+    ],
+  };
 }
 
 export function orderKeyboard(order) {
@@ -116,31 +179,7 @@ export function orderKeyboard(order) {
         callback_data: `of:${order.id}`,
       },
     ]);
-    if (["accepted", "preparing", "ready"].includes(order.status)) {
-      rows.push([
-        {
-          text: order.assigned_courier_name
-            ? `🛵 Кур’єр: ${order.assigned_courier_name}`
-            : "🛵 Призначити кур’єра",
-          callback_data: `oa:${order.id}`,
-        },
-      ]);
-    }
   }
 
   return { inline_keyboard: rows };
-}
-
-export function courierKeyboard(order) {
-  const available = couriers();
-  if (!available.length) return null;
-
-  return {
-    inline_keyboard: available.map((courier) => [
-      {
-        text: courier.name,
-        callback_data: `oc:${order.id}:${courier.id}`,
-      },
-    ]),
-  };
 }

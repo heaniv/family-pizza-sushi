@@ -38,21 +38,6 @@ export function adminChatId() {
   return value;
 }
 
-export function couriers() {
-  try {
-    const value = JSON.parse(process.env.TELEGRAM_COURIERS || "[]");
-    if (!Array.isArray(value)) return [];
-    return value.filter(
-      (courier) =>
-        /^\d+$/.test(String(courier.id)) &&
-        typeof courier.name === "string" &&
-        courier.name.trim(),
-    );
-  } catch {
-    return [];
-  }
-}
-
 export function siteUrl() {
   const value =
     process.env.SITE_URL ||

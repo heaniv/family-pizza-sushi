@@ -1766,6 +1766,15 @@ dialog::backdrop {
   font-size: 12px;
 }
 
+.order-result .tracking-link {
+  margin-top: 16px;
+}
+
+.order-result .tracking-note {
+  margin-top: 9px;
+  font-size: 10px;
+}
+
 /* Confirmation toast */
 #toast {
   position: fixed;

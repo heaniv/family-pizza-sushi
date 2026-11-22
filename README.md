@@ -1,6 +1,6 @@
 # Family Pizza Sushi
 
-Website and Telegram ordering workflow for Family Pizza Sushi in Bohorodchany, Ukraine. Customers can order from the website or open the same menu as a Telegram Mini App. Staff review orders, set delivery fees, assign couriers, and update order status in Telegram. Delivery is confirmed by an administrator; payment is collected on receipt.
+Website and Telegram ordering workflow for Family Pizza Sushi in Bohorodchany, Ukraine. Customers can order from the website or open the same menu as a Telegram Mini App. Staff review orders, set delivery fees, and update order status in Telegram. Customers can open a signed tracking link after checkout and receive status updates in the bot. Delivery is confirmed by an administrator; payment is collected on receipt.
 
 ## Stack
 

@@ -186,6 +186,41 @@ export async function getOrder(orderId) {
   return { ...orders[0], items };
 }
 
+export async function getOrderByNumber(orderNumber) {
+  const sql = db();
+  const orders = await sql`
+    SELECT * FROM orders
+    WHERE order_number::TEXT = ${String(orderNumber)}
+    LIMIT 1
+  `;
+  if (!orders[0]) return null;
+
+  const items = await sql`
+    SELECT menu_item_id, item_name, item_group, quantity,
+           unit_price_uah, line_total_uah
+    FROM order_items
+    WHERE order_id = ${orders[0].id}
+    ORDER BY id
+  `;
+  return { ...orders[0], items };
+}
+
+export async function linkOrderToTelegram(orderId, telegramUserId) {
+  const sql = db();
+  const userId = String(telegramUserId);
+  const rows = await sql`
+    UPDATE orders
+    SET telegram_user_id = ${userId}::BIGINT, updated_at = NOW()
+    WHERE id = ${orderId}
+      AND (
+        telegram_user_id IS NULL
+        OR telegram_user_id = ${userId}::BIGINT
+      )
+    RETURNING id
+  `;
+  return Boolean(rows[0]);
+}
+
 export async function listOpenOrders(limit = 20) {
   const sql = db();
   return sql`
@@ -286,26 +321,6 @@ export async function changeOrderStatus(order, nextStatus, actorId) {
       FROM changed
     )
     SELECT id, status FROM changed
-  `;
-  return rows[0] || null;
-}
-
-export async function assignCourier(order, courier, actorId) {
-  const sql = db();
-  const rows = await sql`
-    WITH changed AS (
-      UPDATE orders
-      SET assigned_courier_id = ${String(courier.id)},
-          assigned_courier_name = ${courier.name},
-          updated_at = NOW()
-      WHERE id = ${order.id} AND status IN ('accepted', 'preparing', 'ready')
-      RETURNING id, assigned_courier_id, assigned_courier_name
-    ), event AS (
-      INSERT INTO order_events (order_id, actor_telegram_id, event_type, old_value, new_value)
-      SELECT id, ${actorId}, 'courier_assigned', NULL, assigned_courier_name
-      FROM changed
-    )
-    SELECT id, assigned_courier_id, assigned_courier_name FROM changed
   `;
   return rows[0] || null;
 }

@@ -1,21 +1,27 @@
 import {
-  assignCourier,
   changeOrderStatus,
   createDeliveryFeeRequest,
   deleteDeliveryFeeRequest,
   findDeliveryFeeRequest,
   getOrder,
+  getOrderByNumber,
+  linkOrderToTelegram,
   listOpenOrders,
   setAdminMessage,
   setDeliveryFee,
 } from "./orders.js";
-import { adminIds, couriers, siteUrl, telegram } from "./telegram-api.js";
+import { adminIds, siteUrl, telegram } from "./telegram-api.js";
 import {
-  courierKeyboard,
+  customerOrderKeyboard,
+  customerOrderSummary,
   formatUah,
   orderKeyboard,
   orderSummary,
 } from "./order-message.js";
+import {
+  parseOrderTrackingPayload,
+  verifyOrderTrackingPayload,
+} from "./order-tracking.js";
 
 function isAdmin(userId) {
   return adminIds().has(String(userId));
@@ -50,9 +56,57 @@ async function notifyCustomer(order, message) {
   });
 }
 
-async function handleStart(message) {
+async function handleOrderTrackingStart(message, payload) {
+  const invalidMessage =
+    "Не вдалося відкрити це замовлення. Поверніться на сайт і натисніть посилання для відстеження ще раз.";
+  const parsed = parseOrderTrackingPayload(payload);
+  if (!parsed) {
+    await telegram("sendMessage", {
+      chat_id: message.chat.id,
+      text: invalidMessage,
+    });
+    return;
+  }
+
+  const order = await getOrderByNumber(parsed.orderNumber);
+  if (
+    !verifyOrderTrackingPayload(
+      payload,
+      order,
+      process.env.TELEGRAM_BOT_TOKEN,
+    )
+  ) {
+    await telegram("sendMessage", {
+      chat_id: message.chat.id,
+      text: invalidMessage,
+    });
+    return;
+  }
+
+  if (!(await linkOrderToTelegram(order.id, message.from.id))) {
+    await telegram("sendMessage", {
+      chat_id: message.chat.id,
+      text: "Це замовлення вже прив’язане до іншого Telegram-акаунта. Якщо потрібна допомога, зателефонуйте нам: 099 720 65 60.",
+    });
+    return;
+  }
+
+  const linkedOrder = await getOrder(order.id);
+  await telegram("sendMessage", {
+    chat_id: message.chat.id,
+    text: customerOrderSummary(linkedOrder),
+    reply_markup: customerOrderKeyboard(linkedOrder),
+  });
+}
+
+async function handleStart(message, payload = "") {
   const userId = message.from?.id;
   if (!userId || message.chat.type !== "private") return;
+
+  if (payload) {
+    await handleOrderTrackingStart(message, payload);
+    return;
+  }
 
   await telegram("sendMessage", {
     chat_id: message.chat.id,
@@ -101,6 +155,15 @@ async function handleOrdersCommand(message) {
   });
 
   for (const order of openOrders) {
+    if (order.admin_message_id) {
+      try {
+        await editOrderMessage(message.chat.id, order);
+        continue;
+      } catch (error) {
+        if (!error.message.includes("failed (400)")) throw error;
+      }
+    }
+
     const sent = await telegram("sendMessage", {
       chat_id: message.chat.id,
       text: orderSummary(order),
@@ -182,7 +245,7 @@ async function handleMessage(message) {
   const command = message.text?.split(/\s+/, 1)[0]?.split("@")[0];
 
   if (command === "/start") {
-    await handleStart(message);
+    await handleStart(message, message.text?.trim().split(/\s+/)[1] || "");
     return;
   }
   if (command === "/menu") {
@@ -202,7 +265,47 @@ async function handleMessage(message) {
   }
 }
 
+async function handleCustomerTrackingCallback(callback) {
+  const actorId = callback.from?.id;
+  const chatId = callback.message?.chat?.id;
+  const orderId = /^ct:([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})$/i.exec(
+    callback.data || "",
+  )?.[1];
+  if (!orderId || callback.message?.chat?.type !== "private") {
+    await answerCallback(callback.id, "Не вдалося оновити статус.", true);
+    return;
+  }
+
+  const order = await getOrder(orderId);
+  if (!order || String(order.telegram_user_id) !== String(actorId)) {
+    await answerCallback(
+      callback.id,
+      "Це замовлення прив’язане до іншого акаунта.",
+      true,
+    );
+    return;
+  }
+
+  try {
+    await telegram("editMessageText", {
+      chat_id: chatId,
+      message_id: callback.message.message_id,
+      text: customerOrderSummary(order),
+      reply_markup: customerOrderKeyboard(order),
+    });
+    await answerCallback(callback.id, "Статус оновлено.");
+  } catch (error) {
+    if (!error.message.includes("failed (400)")) throw error;
+    await answerCallback(callback.id, "Поточний статус уже показано.");
+  }
+}
+
 async function handleCallback(callback) {
+  if (callback.data?.startsWith("ct:")) {
+    await handleCustomerTrackingCallback(callback);
+    return;
+  }
+
   const actorId = callback.from?.id;
   const chatId = callback.message?.chat?.id;
   if (!isAdmin(actorId) || !isAdminChat(chatId)) {
@@ -215,7 +318,7 @@ async function handleCallback(callback) {
   }
 
   const [, action, orderId, value] =
-    /^(o[asfc]):([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})(?::([a-z_0-9-]+))?$/i.exec(
+    /^(o[sf]):([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})(?::([a-z_0-9-]+))?$/i.exec(
       callback.data || "",
     ) || [];
   if (!action || !orderId) {
@@ -263,69 +366,12 @@ async function handleCallback(callback) {
     return;
   }
 
-  if (action === "oa") {
-    const keyboard = courierKeyboard(order);
-    if (!keyboard) {
-      await answerCallback(
-        callback.id,
-        "Додайте кур’єрів у TELEGRAM_COURIERS.",
-        true,
-      );
-      return;
-    }
-    await telegram("editMessageReplyMarkup", {
-      chat_id: chatId,
-      message_id: callback.message.message_id,
-      reply_markup: keyboard,
-    });
-    await answerCallback(callback.id, "Оберіть кур’єра.");
-    return;
-  }
-
-  if (action === "oc") {
-    const courier = couriers().find((entry) => String(entry.id) === value);
-    if (!courier) {
-      await answerCallback(callback.id, "Кур’єра не знайдено.", true);
-      return;
-    }
-
-    const assigned = await assignCourier(order, courier, actorId);
-    if (!assigned) {
-      await answerCallback(
-        callback.id,
-        "Кур’єра можна призначити після прийняття замовлення.",
-        true,
-      );
-      return;
-    }
-
-    const updatedOrder = await getOrder(order.id);
-    await editOrderMessage(chatId, updatedOrder);
-    try {
-      await telegram("sendMessage", {
-        chat_id: courier.id,
-        text: `Вам призначено замовлення №${String(order.order_number).padStart(5, "0")}\n\n${orderSummary(updatedOrder)}`,
-      });
-      await answerCallback(callback.id, `Призначено: ${courier.name}`);
-    } catch {
-      await answerCallback(
-        callback.id,
-        "Кур’єра призначено, але бот не зміг написати йому. Попросіть кур’єра відкрити бота командою /start.",
-        true,
-      );
-    }
-    return;
-  }
-
   if (action === "os") {
     const nextStatus = value;
-    if (
-      nextStatus === "on_delivery" &&
-      (order.fulfillment_type !== "delivery" || !order.assigned_courier_id)
-    ) {
+    if (nextStatus === "on_delivery" && order.fulfillment_type !== "delivery") {
       await answerCallback(
         callback.id,
-        "Спочатку оберіть кур’єра для доставки.",
+        "Статус «У дорозі» доступний лише для доставки.",
         true,
       );
       return;
