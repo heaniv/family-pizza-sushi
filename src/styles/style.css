@@ -616,15 +616,23 @@ h4 {
   justify-content: space-around;
   gap: clamp(25px, 4.2vw, 66px);
   padding-inline: 26px;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 900;
   letter-spacing: 0.2em;
 }
 
 .flavour-strip span {
   display: inline-flex;
-  width: 23px;
-  height: 23px;
+  width: 28px;
+  height: 28px;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.flavour-strip span .ui-icon {
+  width: 27px;
+  height: 27px;
 }
 
 /* Menu */
@@ -1996,12 +2004,17 @@ dialog::backdrop {
     min-height: 43px;
     gap: 17px;
     padding-inline: 18px;
-    font-size: 9px;
+    font-size: 10px;
   }
 
   .flavour-strip span {
-    width: 17px;
-    height: 17px;
+    width: 19px;
+    height: 19px;
+  }
+
+  .flavour-strip span .ui-icon {
+    width: 19px;
+    height: 19px;
   }
 
   .menu-section,
